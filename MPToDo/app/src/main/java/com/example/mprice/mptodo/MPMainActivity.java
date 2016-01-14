@@ -8,7 +8,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 
@@ -20,7 +19,10 @@ import java.util.ArrayList;
 
 public class MPMainActivity extends AppCompatActivity {
     ArrayList<String> items;
-    ArrayAdapter<String> itemsAdapter;
+   // ArrayAdapter<String> itemsAdapter;
+
+    MPTaskListAdapter mTaskListAdapter;
+
     ListView lvItems;
     int REQUEST_CODE = 20;
     @Override
@@ -32,8 +34,10 @@ public class MPMainActivity extends AppCompatActivity {
 
         lvItems = (ListView)findViewById(R.id.lvItems);
         readItems();
-        itemsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, items);
-        lvItems.setAdapter(itemsAdapter);
+
+        mTaskListAdapter = new MPTaskListAdapter(this);
+       // itemsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, items);
+        lvItems.setAdapter(mTaskListAdapter);
 
 
 
@@ -41,17 +45,6 @@ public class MPMainActivity extends AppCompatActivity {
     }
 
     private void setupListViewListener() {
-
-//        lvItems.setOnItemLongClickListener(
-//                new AdapterView.OnItemLongClickListener() {
-//                    @Override
-//                    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-//                        items.remove(position);
-//                        itemsAdapter.notifyDataSetChanged();
-//                        writeItems();
-//                        return true;
-//                    }
-//                });
 
         lvItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -82,7 +75,7 @@ public class MPMainActivity extends AppCompatActivity {
             int position = data.getExtras().getInt("position", 0);
 
             items.set(position, text);
-            itemsAdapter.notifyDataSetChanged();
+          //  itemsAdapter.notifyDataSetChanged();
             writeItems();
 
         }
@@ -114,10 +107,13 @@ public class MPMainActivity extends AppCompatActivity {
         EditText etNewItem = (EditText)findViewById(R.id.etNewItem);
         String itemText = etNewItem.getText().toString();
 
-        itemsAdapter.add(itemText);
+
+        MPTask t = new MPTask();
+t.name = itemText;
+        mTaskListAdapter.addTask(t);
         etNewItem.setText("");
 
-        writeItems();
+       // writeItems();
     }
 
     private void readItems() {
