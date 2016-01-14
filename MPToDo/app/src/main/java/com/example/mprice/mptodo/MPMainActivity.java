@@ -1,5 +1,6 @@
 package com.example.mprice.mptodo;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -21,7 +22,7 @@ public class MPMainActivity extends AppCompatActivity {
     ArrayList<String> items;
     ArrayAdapter<String> itemsAdapter;
     ListView lvItems;
-
+    int REQUEST_CODE = 20;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,17 +42,50 @@ public class MPMainActivity extends AppCompatActivity {
 
     private void setupListViewListener() {
 
-        lvItems.setOnItemLongClickListener(
-                new AdapterView.OnItemLongClickListener() {
-                    @Override
-                    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                        items.remove(position);
-                        itemsAdapter.notifyDataSetChanged();
-                        writeItems();
-                        return true;
-                    }
-                });
+//        lvItems.setOnItemLongClickListener(
+//                new AdapterView.OnItemLongClickListener() {
+//                    @Override
+//                    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+//                        items.remove(position);
+//                        itemsAdapter.notifyDataSetChanged();
+//                        writeItems();
+//                        return true;
+//                    }
+//                });
 
+        lvItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+
+                Intent i = new Intent(MPMainActivity.this, MPEditItemActivity.class);
+                // put "extras" into the bundle for access in the second activity
+
+                String text = items.get(position);
+                i.putExtra("text", text);
+                i.putExtra("position", position);
+                // brings up the second activity
+
+                startActivityForResult(i, REQUEST_CODE);
+
+            }
+        });
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // REQUEST_CODE is defined above
+        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
+            // Extract name value from result extras
+            String text = data.getExtras().getString("text");
+            int position = data.getExtras().getInt("position", 0);
+
+            items.set(position, text);
+            itemsAdapter.notifyDataSetChanged();
+            writeItems();
+
+        }
     }
 
     @Override
@@ -102,7 +136,7 @@ public class MPMainActivity extends AppCompatActivity {
         File todoFile = new File(filesDir, "todo.txt");
 
         try {
-           FileUtils.writeLines(todoFile, items);
+            FileUtils.writeLines(todoFile, items);
         } catch (IOException e) {
             e.printStackTrace();
         }
