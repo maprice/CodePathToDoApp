@@ -1,15 +1,22 @@
 package com.example.mprice.mptodo;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.ListView;
+
+import java.util.ArrayList;
 
 public class MPMainActivity extends AppCompatActivity {
+    ArrayList<String> items;
+    ArrayAdapter<String> itemsAdapter;
+    ListView lvItems;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,14 +25,31 @@ public class MPMainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        lvItems = (ListView)findViewById(R.id.lvItems);
+        items = new ArrayList<>();
+
+        itemsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, items);
+        lvItems.setAdapter(itemsAdapter);
+
+
+        items.add("First");
+        items.add("Second");
+
+        setupListViewListener();
+    }
+
+    private void setupListViewListener() {
+
+        lvItems.setOnItemLongClickListener(
+                new AdapterView.OnItemLongClickListener() {
+                    @Override
+                    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                        items.remove(position);
+                        itemsAdapter.notifyDataSetChanged();
+                        return true;
+                    }
+                });
+
     }
 
     @Override
@@ -49,4 +73,16 @@ public class MPMainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    public void onAddItem(View v) {
+        EditText etNewItem = (EditText)findViewById(R.id.etNewItem);
+        String itemText = etNewItem.getText().toString();
+
+        itemsAdapter.add(itemText);
+        etNewItem.setText("");
+
+    }
+
+    
 }
+
