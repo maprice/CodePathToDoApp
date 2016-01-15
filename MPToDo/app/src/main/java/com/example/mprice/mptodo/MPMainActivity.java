@@ -3,6 +3,7 @@ package com.example.mprice.mptodo;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -126,6 +127,10 @@ lvItems.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            FragmentManager fm = getSupportFragmentManager();
+            MPAddCategoryDialog editNameDialog = MPAddCategoryDialog.newInstance("Some Title");
+            editNameDialog.show(fm, "fragment_edit_name");
+
             return true;
         }
 

@@ -72,7 +72,7 @@ public class MPEditItemActivity extends AppCompatActivity {
         }
 
         mTask.name = editTextName.getText().toString();
-
+        mTask.priority = spinnerPriority.getSelectedItemPosition();
         MPTaskCategory category = (MPTaskCategory) spinnerCategory.getSelectedItem();
         Log.e("Tag", category.title);
         mTask.addToCategory(category);

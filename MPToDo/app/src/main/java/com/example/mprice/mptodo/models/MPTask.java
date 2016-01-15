@@ -19,6 +19,9 @@ public class MPTask extends BaseModel {
     @Column
     public String name;
 
+    @Column
+    public int priority;
+
     @ForeignKey(saveForeignKeyModel = false)
     public ForeignKeyContainer<MPTaskCategory> categoryForeignKeyContainer;
 

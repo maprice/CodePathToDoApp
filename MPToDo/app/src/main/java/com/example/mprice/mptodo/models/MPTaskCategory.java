@@ -21,10 +21,7 @@ public class MPTaskCategory extends BaseModel {
 
     @Column
     public String title;
-
-    @Column
-    public int color;
-
+    
     List<MPTask> tasks;
 
     @OneToMany(methods = {OneToMany.Method.SAVE, OneToMany.Method.DELETE}, variableName = "tasks")

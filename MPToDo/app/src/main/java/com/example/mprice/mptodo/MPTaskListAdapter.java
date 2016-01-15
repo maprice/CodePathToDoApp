@@ -89,6 +89,13 @@ public class MPTaskListAdapter extends BaseExpandableListAdapter {
         lblListHeader.setTypeface(null, Typeface.ITALIC);
         lblListHeader.setText(headerTitle);
 
+        TextView progress = (TextView) convertView
+                .findViewById(R.id.text_view_progress);
+        progress.setTypeface(null, Typeface.NORMAL);
+        String progressText = "0/" + getChildrenCount(groupPosition);
+        progress.setText(progressText);
+
+
         return convertView;
     }
 
@@ -105,13 +112,17 @@ public class MPTaskListAdapter extends BaseExpandableListAdapter {
             }
 
             TextView textView1 = (TextView) rowView.findViewById(R.id.firstLine);
-//            TextView textView2 = (TextView) rowView.findViewById(R.id.secondLine);
+
+            TextView textView2 = (TextView) rowView.findViewById(R.id.secondLine);
 
             MPTask task  = getChild(groupPosition, childPosition);
 
 
             textView1.setText(task.name);
 
+        Resources res = context.getResources();
+        String[] colorArray = res.getStringArray(R.array.priority_array);
+textView2.setText(colorArray[task.priority]);
             return rowView;
     }
 
