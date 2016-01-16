@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#89E894</color>
-    <color name="colorPrimaryDark">#6FD955</color>
-    <color name="colorAccent">#34DDDD</color>
+    <color name="colorPrimary">#FF702E</color>
+    <color name="colorPrimaryDark">#FF702E</color>
+    <color name="colorAccent">#EB4800</color>
 
 
-    <color name="colorGroup1">#93E2D5</color>
-    <color name="colorGroup2">#34DDDD</color>
-    <color name="colorGroup3">#7AF5F5</color>
+    <color name="colorGroup1">#78DEED</color>
+    <color name="colorGroup2">#3CD0E5</color>
+    <color name="colorGroup3">#00C5DD</color>
     <color name="colorGroup4">#78D5E3</color>
     <color name="colorGroup5">#89E894</color>
     <color name="colorGroup6">#BED661</color>
@@ -17,9 +17,7 @@
         <item>@color/colorGroup1</item>
         <item>@color/colorGroup2</item>
         <item>@color/colorGroup3</item>
-        <item>@color/colorGroup4</item>
-        <item>@color/colorGroup5</item>
-        <item>@color/colorGroup6</item>
+
     </integer-array>
 
 </resources>

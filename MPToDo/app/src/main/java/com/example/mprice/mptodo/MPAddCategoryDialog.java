@@ -1,5 +1,6 @@
 package com.example.mprice.mptodo;
 
+import android.app.Dialog;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -7,16 +8,15 @@ import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
 
 import com.example.mprice.mptodo.models.MPTaskCategory;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 
 /**
@@ -30,7 +30,7 @@ import butterknife.OnClick;
 public class MPAddCategoryDialog extends DialogFragment implements View.OnClickListener {
 
     @Bind(R.id.buttonAdd) Button buttonAdd;
-    @Bind(R.id.buttonCancel) Button buttonCancel;
+    @Bind(R.id.dialogCancelButton) Button buttonCancel;
     @Bind(R.id.edit_text_name) EditText editTextName;
 
 
@@ -53,14 +53,16 @@ public class MPAddCategoryDialog extends DialogFragment implements View.OnClickL
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_mpadd_category_dialog, container);
         ButterKnife.bind(this, view);
+        getDialog().setTitle("Add Category");
+
         return view;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         buttonAdd.setOnClickListener(this);
+        buttonCancel.setOnClickListener(this);
 
         editTextName.requestFocus();
         getDialog().getWindow().setSoftInputMode(
@@ -70,7 +72,7 @@ public class MPAddCategoryDialog extends DialogFragment implements View.OnClickL
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.buttonCancel:
+            case R.id.dialogCancelButton:
 
                 dismiss();
 
@@ -84,4 +86,12 @@ public class MPAddCategoryDialog extends DialogFragment implements View.OnClickL
         }
     }
 
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        Dialog dialog = super.onCreateDialog(savedInstanceState);
+
+        // request a window without the title
+        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        return dialog;
+    }
 }

@@ -22,6 +22,18 @@ public class MPTask extends BaseModel {
     @Column
     public int priority;
 
+    @Column
+    public int year;
+
+    @Column
+    public int month;
+
+    @Column
+    public int day;
+
+    @Column
+    public boolean complete;
+
     @ForeignKey(saveForeignKeyModel = false)
     public ForeignKeyContainer<MPTaskCategory> categoryForeignKeyContainer;
 

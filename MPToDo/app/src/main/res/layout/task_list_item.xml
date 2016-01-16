@@ -4,15 +4,17 @@
     android:layout_height="60dip"
     android:padding="6dip" >
 
-    <ImageView
-        android:id="@+id/icon"
+    <CheckBox
         android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:id="@+id/checkBoxItem"
         android:layout_alignParentBottom="true"
         android:layout_alignParentTop="true"
         android:layout_marginRight="6dip"
         android:contentDescription="TODO"
-        android:src="@android:drawable/ic_input_add" />
+        android:clickable="false"
+        android:focusable="false"/>
 
     <TextView
         android:id="@+id/secondLine"
@@ -20,7 +22,7 @@
         android:layout_height="26dip"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_toRightOf="@id/icon"
+        android:layout_toRightOf="@id/checkBoxItem"
         android:ellipsize="marquee"
         android:singleLine="true"
         android:text="Description"
@@ -34,9 +36,19 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:layout_alignWithParentIfMissing="true"
-        android:layout_toRightOf="@id/icon"
+        android:layout_toRightOf="@id/checkBoxItem"
         android:gravity="center_vertical"
         android:text="Example application"
         android:textSize="16sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="04/12/2016"
+        android:id="@+id/dateText"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
 
 </RelativeLayout>

@@ -30,6 +30,7 @@ public class MPTaskCategory extends BaseModel {
             tasks = SQLite.select()
                     .from(MPTask.class)
                     .where(MPTask_Table.categoryForeignKeyContainer_id.eq(id))
+                    .orderBy(MPTask_Table.priority, true)
                     .queryList();
         }
         return tasks;

@@ -6,8 +6,9 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
@@ -23,16 +24,15 @@ public class MPMainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mpmain);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         lvItems = (ExpandableListView)findViewById(R.id.lvItems);
-       // readItems();
-
-
+        registerForContextMenu(lvItems);
 
         mTaskListAdapter = new MPTaskListAdapter(this);
-       // itemsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, items);
+        // itemsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, items);
         lvItems.setAdapter(mTaskListAdapter);
 
         setupListViewListener();
@@ -58,57 +58,61 @@ public class MPMainActivity extends AppCompatActivity {
         });
     }
 
-
-
-    private void setupListViewListener() {
-lvItems.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v,
+                                    ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.actions, menu);
+    }
 
     @Override
-    public boolean onChildClick(ExpandableListView parent, View v,
-                                int groupPosition, int childPosition, long id) {
+    public boolean onContextItemSelected(MenuItem item) {
+        ExpandableListView.ExpandableListContextMenuInfo info =
+                (ExpandableListView.ExpandableListContextMenuInfo) item.getMenuInfo();
+        int groupPos = 0, childPos = 0;
 
-        Intent i = new Intent(MPMainActivity.this, MPEditItemActivity.class);
-        // put "extras" into the bundle for access in the second activity
+            groupPos = ExpandableListView.getPackedPositionGroup(info.packedPosition);
+            childPos = ExpandableListView.getPackedPositionChild(info.packedPosition);
 
-       // MPTaskCategory category = mTaskListAdapter.getGroup(groupPosition);
-        MPTask task = mTaskListAdapter.getChild(groupPosition, childPosition);
-        i.putExtra("taskId", task.id);
+       MPTask task = mTaskListAdapter.getChild(groupPos, childPos);
+        task.delete();
 
-        // brings up the second activity
-
-        startActivity(i);
+        mTaskListAdapter.notifyDataSetChanged();
 
         return true;
     }
-});
+
+    private void setupListViewListener() {
+        lvItems.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v,
+                                        int groupPosition, int childPosition, long id) {
+
+                Intent i = new Intent(MPMainActivity.this, MPEditItemActivity.class);
+                // put "extras" into the bundle for access in the second activity
+
+                // MPTaskCategory category = mTaskListAdapter.getGroup(groupPosition);
+                MPTask task = mTaskListAdapter.getChild(groupPosition, childPosition);
+                i.putExtra("taskId", task.id);
+                i.putExtra("color", groupPosition);
+
+                // brings up the second activity
+
+                startActivity(i);
+
+                return true;
+            }
+        });
 
 
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // REQUEST_CODE is defined above
-        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
-            // Extract name value from result extras
-            String text = data.getExtras().getString("text");
-            int position = data.getExtras().getInt("position", 0);
-
-            //items.set(position, text);
-          //  itemsAdapter.notifyDataSetChanged();
-            //writeItems();
-
-        }
     }
 
     @Override
     public void onResume() {
         super.onResume();  // Always call the superclass method first
-
-        Log.e("sadkjfnaskljdfn", "cghanged");
-
-
         mTaskListAdapter.notifyDataSetChanged();
-
     }
 
     @Override
@@ -136,54 +140,5 @@ lvItems.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
 
         return super.onOptionsItemSelected(item);
     }
-
-    public void onAddItem(View v) {
-       // EditText etNewItem = (EditText)findViewById(R.id.etNewItem);
-        //String itemText = etNewItem.getText().toString();
-
-//
-//        MPTaskCategory c = new MPTaskCategory();
-//        c.title = itemText;
-//
-//        c.save();
-//
-//        MPTask t = new MPTask();
-//        t.name = itemText;
-//
-//        MPTask t1 = new MPTask();
-//        t1.name = itemText + 2;
-//
-//        t.addToCategory(c);
-//        t1.addToCategory(c);
-//t.save();
-//        t1.save();
-//        mTaskListAdapter.addCategory(c);
-//        etNewItem.setText("");
-
-       // writeItems();
-    }
-
-//    private void readItems() {
-//        File filesDir = getFilesDir();
-//        File todoFile = new File(filesDir, "todo.txt");
-//
-//        try {
-//            items = new ArrayList<>(FileUtils.readLines(todoFile));
-//        } catch (IOException e) {
-//            items = new ArrayList<>();
-//        }
-//    }
-//
-//    private void writeItems() {
-//        File filesDir = getFilesDir();
-//        File todoFile = new File(filesDir, "todo.txt");
-//
-//        try {
-//            FileUtils.writeLines(todoFile, items);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
 }
 

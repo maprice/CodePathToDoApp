@@ -1,11 +1,15 @@
 package com.example.mprice.mptodo;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 
 import com.example.mprice.mptodo.models.MPTask;
@@ -23,10 +27,12 @@ public class MPEditItemActivity extends AppCompatActivity {
     @Bind(R.id.spinnerCategory) Spinner spinnerCategory;
     @Bind(R.id.spinnerPriority) Spinner spinnerPriority;
     @Bind(R.id.editTextName) EditText editTextName;
+    @Bind(R.id.checkBox) CheckBox checkBox;
+    @Bind(R.id.datePicker) DatePicker datePicker;
+    @Bind(R.id.view_edit_item) LinearLayout layout;
 
     private MPTask mTask;
 
-    private int mPosition;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +53,15 @@ public class MPEditItemActivity extends AppCompatActivity {
 
 
         long taskId = getIntent().getLongExtra("taskId", 0);
+        int colorId = getIntent().getIntExtra("color", 0);
+
+        Resources res = this.getResources();
+        int[] colorArray = res.getIntArray(R.array.androidcolors);
+
+        int color = colorId % colorArray.length;
+
+
+
         if (taskId < 0) {
             editTextName.setText("");
         } else {
@@ -54,6 +69,9 @@ public class MPEditItemActivity extends AppCompatActivity {
 
 
             if (mTask != null) {
+
+                layout.setBackgroundColor(colorArray[color]);
+
                 editTextName.setText(mTask.name);
                 MPTaskCategory category = mTask.categoryForeignKeyContainer.load();
 
@@ -62,6 +80,10 @@ public class MPEditItemActivity extends AppCompatActivity {
                         spinnerCategory.setSelection(i);
                     }
                 }
+
+                checkBox.setChecked(mTask.complete);
+
+                datePicker.updateDate(mTask.year, mTask.month, mTask.day);
             }
         }
     }
@@ -73,6 +95,11 @@ public class MPEditItemActivity extends AppCompatActivity {
 
         mTask.name = editTextName.getText().toString();
         mTask.priority = spinnerPriority.getSelectedItemPosition();
+        mTask.complete = checkBox.isChecked();
+        mTask.year = datePicker.getYear();
+        mTask.month = datePicker.getMonth();
+        mTask.day = datePicker.getDayOfMonth();
+
         MPTaskCategory category = (MPTaskCategory) spinnerCategory.getSelectedItem();
         Log.e("Tag", category.title);
         mTask.addToCategory(category);

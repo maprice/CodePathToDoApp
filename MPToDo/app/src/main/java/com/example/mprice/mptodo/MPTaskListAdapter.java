@@ -8,12 +8,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.example.mprice.mptodo.models.MPTask;
 import com.example.mprice.mptodo.models.MPTaskCategory;
 import com.example.mprice.mptodo.models.MPTaskCategory_Table;
+import com.example.mprice.mptodo.models.MPTask_Table;
 import com.raizlabs.android.dbflow.list.FlowQueryList;
+import com.raizlabs.android.dbflow.sql.language.SQLite;
+
+import java.util.List;
 
 /**
  * Created by mprice on 1/13/16.
@@ -92,7 +97,17 @@ public class MPTaskListAdapter extends BaseExpandableListAdapter {
         TextView progress = (TextView) convertView
                 .findViewById(R.id.text_view_progress);
         progress.setTypeface(null, Typeface.NORMAL);
-        String progressText = "0/" + getChildrenCount(groupPosition);
+
+
+        MPTaskCategory category = getGroup(groupPosition);
+
+
+        List<MPTask> sadfasd = SQLite.select()
+                .from(MPTask.class)
+                .where(MPTask_Table.categoryForeignKeyContainer_id.eq(category.id)).and(MPTask_Table.complete.is(true)).queryList();
+
+
+        String progressText = sadfasd.size() + "/" + getChildrenCount(groupPosition);
         progress.setText(progressText);
 
 
@@ -114,15 +129,24 @@ public class MPTaskListAdapter extends BaseExpandableListAdapter {
             TextView textView1 = (TextView) rowView.findViewById(R.id.firstLine);
 
             TextView textView2 = (TextView) rowView.findViewById(R.id.secondLine);
+TextView dateText = (TextView) rowView.findViewById(R.id.dateText);
+
+        CheckBox checkBox = (CheckBox) rowView.findViewById(R.id.checkBoxItem);
 
             MPTask task  = getChild(groupPosition, childPosition);
 
+        String date = task.day + "/" + task.month + "/" + task.year;
+        checkBox.setChecked(task.complete);
+        dateText.setText(date);
 
             textView1.setText(task.name);
 
         Resources res = context.getResources();
         String[] colorArray = res.getStringArray(R.array.priority_array);
 textView2.setText(colorArray[task.priority]);
+
+
+
             return rowView;
     }
 
@@ -146,6 +170,7 @@ textView2.setText(colorArray[task.priority]);
 
         return colorArray[color];
     }
+
     @Override
     public void notifyDataSetChanged() {
         mFlowQueryList.refresh();
