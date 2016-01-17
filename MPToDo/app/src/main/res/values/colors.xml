@@ -4,6 +4,9 @@
     <color name="colorPrimaryDark">#FF702E</color>
     <color name="colorAccent">#EB4800</color>
 
+    <color name="colorOKButton">#BED661</color>
+    <color name="colorCancelButton">#FF7878</color>
+
 
     <color name="colorGroup1">#78DEED</color>
     <color name="colorGroup2">#3CD0E5</color>
@@ -12,6 +15,17 @@
     <color name="colorGroup5">#89E894</color>
     <color name="colorGroup6">#BED661</color>
 
+
+    <color name="colorPriority1">#FF7878</color>
+    <color name="colorPriority2">#3CD0E5</color>
+    <color name="colorPriority3">#BED661</color>
+
+    <integer-array name="priorityColors">
+        <item>@color/colorPriority1</item>
+        <item>@color/colorPriority2</item>
+        <item>@color/colorPriority3</item>
+
+    </integer-array>
 
     <integer-array name="androidcolors">
         <item>@color/colorGroup1</item>

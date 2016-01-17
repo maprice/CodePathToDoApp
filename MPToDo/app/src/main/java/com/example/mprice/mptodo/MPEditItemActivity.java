@@ -61,7 +61,6 @@ public class MPEditItemActivity extends AppCompatActivity {
         int color = colorId % colorArray.length;
 
 
-
         if (taskId < 0) {
             editTextName.setText("");
         } else {
@@ -86,6 +85,9 @@ public class MPEditItemActivity extends AppCompatActivity {
                 datePicker.updateDate(mTask.year, mTask.month, mTask.day);
             }
         }
+
+        editTextName.setSelection(editTextName.getText().length());
+
     }
 
     public void onSaveClick(View v){

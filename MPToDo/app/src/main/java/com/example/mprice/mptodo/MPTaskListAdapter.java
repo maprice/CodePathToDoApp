@@ -38,6 +38,7 @@ public class MPTaskListAdapter extends BaseExpandableListAdapter {
 
             mFlowQueryList = new FlowQueryList<>(MPTaskCategory.class, MPTaskCategory_Table.title.like("%"));
             mFlowQueryList.enableSelfRefreshes(context);
+           // mFlowQueryList.enableSelfRefreshes(context);
            // mFlowQueryList = new FlowQueryList<>(MPTask.class, MPTask_Table.name.like("%"));
         }
 
@@ -145,6 +146,9 @@ TextView dateText = (TextView) rowView.findViewById(R.id.dateText);
         String[] colorArray = res.getStringArray(R.array.priority_array);
 textView2.setText(colorArray[task.priority]);
 
+        int[] priorityColors = res.getIntArray(R.array.priorityColors);
+        textView2.setTextColor(priorityColors[task.priority]);
+
 
 
             return rowView;
@@ -153,13 +157,6 @@ textView2.setText(colorArray[task.priority]);
     @Override
     public boolean isChildSelectable(int groupPosition, int childPosition) {
         return true;
-    }
-
-
-    public void addCategory(MPTaskCategory model) {
-        mFlowQueryList.add(model);
-        mFlowQueryList.refresh();
-        notifyDataSetChanged();
     }
 
     private int getColor(int position) {
@@ -175,6 +172,11 @@ textView2.setText(colorArray[task.priority]);
     public void notifyDataSetChanged() {
         mFlowQueryList.refresh();
         super.notifyDataSetChanged();
+
+    }
+
+    public void removeGroup(int groupPos) {
+        mFlowQueryList.remove(groupPos);
     }
 
 }

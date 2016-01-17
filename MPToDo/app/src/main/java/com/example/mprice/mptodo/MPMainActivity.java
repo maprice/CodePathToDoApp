@@ -5,15 +5,15 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.ContextMenu;
-import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
 
 import com.example.mprice.mptodo.models.MPTask;
+import com.example.mprice.mptodo.models.MPTaskCategory;
 
 public class MPMainActivity extends AppCompatActivity {
     MPTaskListAdapter mTaskListAdapter;
@@ -24,9 +24,8 @@ public class MPMainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mpmain);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
 
         lvItems = (ExpandableListView)findViewById(R.id.lvItems);
         registerForContextMenu(lvItems);
@@ -75,11 +74,22 @@ public class MPMainActivity extends AppCompatActivity {
             groupPos = ExpandableListView.getPackedPositionGroup(info.packedPosition);
             childPos = ExpandableListView.getPackedPositionChild(info.packedPosition);
 
-       MPTask task = mTaskListAdapter.getChild(groupPos, childPos);
-        task.delete();
+        Log.e("sdfsadfas", childPos + ":" + groupPos);
+
+        if (childPos >= 0) {
+            MPTask task = mTaskListAdapter.getChild(groupPos, childPos);
+            task.delete();
+            task.save();
+        } else {
+//            MPTaskCategory category = mTaskListAdapter.getGroup(groupPos);
+//            category.delete();
+//            category.save();
+        }
+
+
+        mTaskListAdapter.removeGroup(groupPos);
 
         mTaskListAdapter.notifyDataSetChanged();
-
         return true;
     }
 
@@ -115,30 +125,16 @@ public class MPMainActivity extends AppCompatActivity {
         mTaskListAdapter.notifyDataSetChanged();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_mpmain, menu);
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+    public void onCategoryCreateClicked(View item) {
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
             FragmentManager fm = getSupportFragmentManager();
             MPAddCategoryDialog editNameDialog = MPAddCategoryDialog.newInstance("Some Title");
             editNameDialog.show(fm, "fragment_edit_name");
 
-            return true;
-        }
 
-        return super.onOptionsItemSelected(item);
+
+
     }
 }
 

@@ -48,6 +48,9 @@
                 android:textColor="#FFFFFF"
                 android:textStyle="bold"
 android:layout_marginLeft="10dp"
+                android:imeOptions="actionDone"
+                android:hint="Enter task name"
+                android:singleLine="true"
                 />
         </LinearLayout>
     </LinearLayout>
