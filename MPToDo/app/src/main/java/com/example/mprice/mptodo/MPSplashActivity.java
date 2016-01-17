@@ -2,6 +2,7 @@ package com.example.mprice.mptodo;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 
 /**
@@ -13,8 +14,16 @@ public class MPSplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Intent intent = new Intent(this, MPMainActivity.class);
-        startActivity(intent);
-        finish();
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                Intent intent = new Intent(MPSplashActivity.this, MPMainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        }, 2000);
     }
+
+
+    
 }
