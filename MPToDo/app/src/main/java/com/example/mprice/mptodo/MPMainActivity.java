@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -87,15 +86,10 @@ public void onDismiss(final DialogInterface dialog) {
             groupPos = ExpandableListView.getPackedPositionGroup(info.packedPosition);
             childPos = ExpandableListView.getPackedPositionChild(info.packedPosition);
 
-        Log.e("sdfsadfas", childPos + ":" + groupPos);
-
         if (childPos >= 0) {
-            MPTask task = mTaskListAdapter.getChild(groupPos, childPos);
-            task.delete();
-            task.save();
+            mTaskListAdapter.removeTask(groupPos,childPos);
+
         } else {
-//            MPTaskCategory category = mTaskListAdapter.getGroup(groupPos);
-//
             mTaskListAdapter.removeGroup(groupPos);
                 }
 
@@ -137,15 +131,10 @@ public void onDismiss(final DialogInterface dialog) {
 
 
     public void onCategoryCreateClicked(View item) {
-
             FragmentManager fm = getSupportFragmentManager();
-            MPAddCategoryDialog editNameDialog = MPAddCategoryDialog.newInstance("Some Title");
+            MPAddCategoryDialog editNameDialog = MPAddCategoryDialog.newInstance();
 
             editNameDialog.show(fm, "fragment_edit_name");
-
-
-
-
     }
 }
 

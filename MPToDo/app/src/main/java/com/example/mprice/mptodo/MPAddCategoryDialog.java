@@ -2,7 +2,6 @@ package com.example.mprice.mptodo;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.app.Fragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -20,21 +19,14 @@ import com.example.mprice.mptodo.models.MPTaskCategory;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link MPAddCategoryDialog.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link MPAddCategoryDialog#newInstance} factory method to
- * create an instance of this fragment.
+ * Created by mprice on 1/16/16.
  */
 public class MPAddCategoryDialog extends DialogFragment implements View.OnClickListener {
 
-    @Bind(R.id.buttonAdd) Button buttonAdd;
-    @Bind(R.id.dialogCancelButton) Button buttonCancel;
-    @Bind(R.id.edit_text_name) EditText editTextName;
-
+    @Bind(R.id.button_dialog_add) Button mButtonOK;
+    @Bind(R.id.button_dialog_cancel) Button mButtonCancel;
+    @Bind(R.id.edit_text_name) EditText mEditTextName;
 
     public MPAddCategoryDialog() {
         // Empty constructor is required for DialogFragment
@@ -42,11 +34,8 @@ public class MPAddCategoryDialog extends DialogFragment implements View.OnClickL
         // Use `newInstance` instead as shown below
     }
 
-    public static MPAddCategoryDialog newInstance(String title) {
+    public static MPAddCategoryDialog newInstance() {
         MPAddCategoryDialog frag = new MPAddCategoryDialog();
-        Bundle args = new Bundle();
-        args.putString("title", title);
-        frag.setArguments(args);
         return frag;
     }
 
@@ -55,18 +44,16 @@ public class MPAddCategoryDialog extends DialogFragment implements View.OnClickL
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_mpadd_category_dialog, container);
         ButterKnife.bind(this, view);
-        getDialog().setTitle("Add Category");
-
         return view;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        buttonAdd.setOnClickListener(this);
-        buttonCancel.setOnClickListener(this);
+        mButtonOK.setOnClickListener(this);
+        mButtonCancel.setOnClickListener(this);
 
-        editTextName.requestFocus();
+        mEditTextName.requestFocus();
         getDialog().getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     }
@@ -74,14 +61,12 @@ public class MPAddCategoryDialog extends DialogFragment implements View.OnClickL
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.dialogCancelButton:
-
+            case R.id.button_dialog_cancel:
                 dismiss();
-
                 break;
-            case R.id.buttonAdd:
+            case R.id.button_dialog_add:
                 MPTaskCategory category = new MPTaskCategory();
-                category.title = editTextName.getText().toString();
+                category.title = mEditTextName.getText().toString();
                 category.save();
                 dismiss();
                 break;

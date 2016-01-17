@@ -13,7 +13,6 @@ public class MPSplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             public void run() {
@@ -21,9 +20,9 @@ public class MPSplashActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
             }
-        }, 2000);
+        }, 1000);
     }
 
 
-    
+
 }

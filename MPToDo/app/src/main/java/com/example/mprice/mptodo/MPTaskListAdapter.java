@@ -26,21 +26,21 @@ import java.util.List;
 public class MPTaskListAdapter extends BaseExpandableListAdapter {
 
 
-        private FlowQueryList<MPTaskCategory> mFlowQueryList;
+    private FlowQueryList<MPTaskCategory> mFlowQueryList;
 
-        private final Context context;
-
-
-
-        public MPTaskListAdapter(Context context) {
-            this.context = context;
+    private final Context context;
 
 
-            mFlowQueryList = new FlowQueryList<>(MPTaskCategory.class, MPTaskCategory_Table.title.like("%"));
-            mFlowQueryList.enableSelfRefreshes(context);
-           // mFlowQueryList.enableSelfRefreshes(context);
-           // mFlowQueryList = new FlowQueryList<>(MPTask.class, MPTask_Table.name.like("%"));
-        }
+
+    public MPTaskListAdapter(Context context) {
+        this.context = context;
+
+
+        mFlowQueryList = new FlowQueryList<>(MPTaskCategory.class, MPTaskCategory_Table.title.like("%"));
+        mFlowQueryList.enableSelfRefreshes(context);
+        // mFlowQueryList.enableSelfRefreshes(context);
+        // mFlowQueryList = new FlowQueryList<>(MPTask.class, MPTask_Table.name.like("%"));
+    }
 
 
     @Override
@@ -118,40 +118,40 @@ public class MPTaskListAdapter extends BaseExpandableListAdapter {
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
 
-            View rowView;
-            if (convertView == null) {
-                LayoutInflater inflater = (LayoutInflater) context
-                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                rowView = inflater.inflate(R.layout.task_list_item, parent, false);
-            } else {
-                rowView = convertView;
-            }
+        View rowView;
+        if (convertView == null) {
+            LayoutInflater inflater = (LayoutInflater) context
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            rowView = inflater.inflate(R.layout.task_list_item, parent, false);
+        } else {
+            rowView = convertView;
+        }
 
-            TextView textView1 = (TextView) rowView.findViewById(R.id.firstLine);
+        TextView textView1 = (TextView) rowView.findViewById(R.id.firstLine);
 
-            TextView textView2 = (TextView) rowView.findViewById(R.id.secondLine);
-TextView dateText = (TextView) rowView.findViewById(R.id.dateText);
+        TextView textView2 = (TextView) rowView.findViewById(R.id.secondLine);
+        TextView dateText = (TextView) rowView.findViewById(R.id.dateText);
 
         CheckBox checkBox = (CheckBox) rowView.findViewById(R.id.checkBoxItem);
 
-            MPTask task  = getChild(groupPosition, childPosition);
+        MPTask task  = getChild(groupPosition, childPosition);
 
         String date = task.day + "/" + (task.month + 1) + "/" + task.year;
         checkBox.setChecked(task.complete);
         dateText.setText(date);
 
-            textView1.setText(task.name);
+        textView1.setText(task.name);
 
         Resources res = context.getResources();
         String[] colorArray = res.getStringArray(R.array.priority_array);
-textView2.setText(colorArray[task.priority]);
+        textView2.setText(colorArray[task.priority]);
 
         int[] priorityColors = res.getIntArray(R.array.priorityColors);
         textView2.setTextColor(priorityColors[task.priority]);
 
 
 
-            return rowView;
+        return rowView;
     }
 
     @Override
@@ -177,6 +177,15 @@ textView2.setText(colorArray[task.priority]);
 
     public void removeGroup(int groupPos) {
         mFlowQueryList.remove(groupPos);
+        mFlowQueryList.get(groupPos).update();
+        mFlowQueryList.refresh();
+    }
+
+    public void removeTask(int groupPos, int childPosition) {
+        mFlowQueryList.get(groupPos).getTasks().get(childPosition).delete();
+        mFlowQueryList.get(groupPos).update();
+        mFlowQueryList.refresh();
+
     }
 
 }

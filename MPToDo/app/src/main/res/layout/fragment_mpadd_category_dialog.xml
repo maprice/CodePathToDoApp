@@ -28,7 +28,7 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/buttonAdd"
+            android:id="@+id/button_dialog_add"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="OK"
@@ -39,7 +39,7 @@
             android:layout_weight="1"/>
 
         <Button
-            android:id="@+id/dialogCancelButton"
+            android:id="@+id/button_dialog_cancel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="CANCEL"
