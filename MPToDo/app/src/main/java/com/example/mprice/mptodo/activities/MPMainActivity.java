@@ -1,4 +1,4 @@
-package com.example.mprice.mptodo;
+package com.example.mprice.mptodo.activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,6 +12,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
 
+import com.example.mprice.mptodo.fragments.MPAddCategoryDialogFragment;
+import com.example.mprice.mptodo.adapters.MPTaskListAdapter;
+import com.example.mprice.mptodo.R;
 import com.example.mprice.mptodo.models.MPTask;
 
 /**
@@ -102,7 +105,7 @@ public class MPMainActivity extends AppCompatActivity implements DialogInterface
 
     public void onCategoryCreateClicked(View item) {
         FragmentManager fm = getSupportFragmentManager();
-        MPAddCategoryDialog editNameDialog = MPAddCategoryDialog.newInstance();
+        MPAddCategoryDialogFragment editNameDialog = MPAddCategoryDialogFragment.newInstance();
         editNameDialog.show(fm, "fragment_edit_name");
     }
 }

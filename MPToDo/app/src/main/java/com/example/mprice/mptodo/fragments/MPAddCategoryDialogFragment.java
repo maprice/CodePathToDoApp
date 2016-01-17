@@ -1,4 +1,4 @@
-package com.example.mprice.mptodo;
+package com.example.mprice.mptodo.fragments;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -14,6 +14,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.mprice.mptodo.R;
 import com.example.mprice.mptodo.models.MPTaskCategory;
 
 import butterknife.Bind;
@@ -22,7 +23,7 @@ import butterknife.ButterKnife;
 /**
  * Created by mprice on 1/16/16.
  */
-public class MPAddCategoryDialog extends DialogFragment implements View.OnClickListener {
+public class MPAddCategoryDialogFragment extends DialogFragment implements View.OnClickListener {
 
     @Bind(R.id.button_dialog_add)
     Button mButtonOK;
@@ -31,14 +32,14 @@ public class MPAddCategoryDialog extends DialogFragment implements View.OnClickL
     @Bind(R.id.edit_text_name)
     EditText mEditTextName;
 
-    public MPAddCategoryDialog() {
+    public MPAddCategoryDialogFragment() {
         // Empty constructor is required for DialogFragment
         // Make sure not to add arguments to the constructor
         // Use `newInstance` instead as shown below
     }
 
-    public static MPAddCategoryDialog newInstance() {
-        MPAddCategoryDialog frag = new MPAddCategoryDialog();
+    public static MPAddCategoryDialogFragment newInstance() {
+        MPAddCategoryDialogFragment frag = new MPAddCategoryDialogFragment();
         return frag;
     }
 

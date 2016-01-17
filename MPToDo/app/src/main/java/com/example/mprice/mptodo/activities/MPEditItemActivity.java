@@ -1,4 +1,4 @@
-package com.example.mprice.mptodo;
+package com.example.mprice.mptodo.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +11,8 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 
+import com.example.mprice.mptodo.utils.MPUtils;
+import com.example.mprice.mptodo.R;
 import com.example.mprice.mptodo.models.MPTask;
 import com.example.mprice.mptodo.models.MPTaskCategory;
 import com.example.mprice.mptodo.models.MPTask_Table;

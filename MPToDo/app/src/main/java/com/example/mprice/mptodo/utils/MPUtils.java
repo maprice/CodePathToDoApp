@@ -1,7 +1,9 @@
-package com.example.mprice.mptodo;
+package com.example.mprice.mptodo.utils;
 
 import android.content.Context;
 import android.content.res.Resources;
+
+import com.example.mprice.mptodo.R;
 
 /**
  * Created by mprice on 1/17/16.

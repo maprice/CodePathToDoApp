@@ -1,4 +1,4 @@
-package com.example.mprice.mptodo;
+package com.example.mprice.mptodo.activities;
 
 import android.content.Intent;
 import android.os.Bundle;

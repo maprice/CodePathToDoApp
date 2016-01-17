@@ -1,4 +1,4 @@
-package com.example.mprice.mptodo;
+package com.example.mprice.mptodo.adapters;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -10,6 +10,8 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import com.example.mprice.mptodo.utils.MPUtils;
+import com.example.mprice.mptodo.R;
 import com.example.mprice.mptodo.models.MPTask;
 import com.example.mprice.mptodo.models.MPTaskCategory;
 import com.example.mprice.mptodo.models.MPTaskCategory_Table;
