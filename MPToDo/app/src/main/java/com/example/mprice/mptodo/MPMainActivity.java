@@ -1,5 +1,6 @@
 package com.example.mprice.mptodo;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -13,9 +14,21 @@ import android.view.View;
 import android.widget.ExpandableListView;
 
 import com.example.mprice.mptodo.models.MPTask;
-import com.example.mprice.mptodo.models.MPTaskCategory;
 
-public class MPMainActivity extends AppCompatActivity {
+public class MPMainActivity extends AppCompatActivity implements DialogInterface.OnDismissListener {
+
+@Override
+public void onDismiss(final DialogInterface dialog) {
+        //Fragment dialog had been dismissed
+
+
+    mTaskListAdapter.notifyDataSetChanged();
+        }
+
+
+
+
+
     MPTaskListAdapter mTaskListAdapter;
 
     ExpandableListView lvItems;
@@ -82,12 +95,9 @@ public class MPMainActivity extends AppCompatActivity {
             task.save();
         } else {
 //            MPTaskCategory category = mTaskListAdapter.getGroup(groupPos);
-//            category.delete();
-//            category.save();
-        }
-
-
-        mTaskListAdapter.removeGroup(groupPos);
+//
+            mTaskListAdapter.removeGroup(groupPos);
+                }
 
         mTaskListAdapter.notifyDataSetChanged();
         return true;
@@ -130,6 +140,7 @@ public class MPMainActivity extends AppCompatActivity {
 
             FragmentManager fm = getSupportFragmentManager();
             MPAddCategoryDialog editNameDialog = MPAddCategoryDialog.newInstance("Some Title");
+
             editNameDialog.show(fm, "fragment_edit_name");
 
 

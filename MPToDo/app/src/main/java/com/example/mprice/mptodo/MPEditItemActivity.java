@@ -63,6 +63,7 @@ public class MPEditItemActivity extends AppCompatActivity {
 
         if (taskId < 0) {
             editTextName.setText("");
+
         } else {
             mTask = SQLite.select().from(MPTask.class).where(MPTask_Table.id.eq(taskId)).querySingle();
 
@@ -89,6 +90,18 @@ public class MPEditItemActivity extends AppCompatActivity {
         editTextName.setSelection(editTextName.getText().length());
 
     }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();  // Always call the superclass method first
+        if (editTextName.getText().toString().isEmpty()) {
+
+
+            editTextName.requestFocus();
+        }
+    }
+
 
     public void onSaveClick(View v){
         if (mTask == null) {

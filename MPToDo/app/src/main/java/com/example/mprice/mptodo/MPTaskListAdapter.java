@@ -136,7 +136,7 @@ TextView dateText = (TextView) rowView.findViewById(R.id.dateText);
 
             MPTask task  = getChild(groupPosition, childPosition);
 
-        String date = task.day + "/" + task.month + "/" + task.year;
+        String date = task.day + "/" + (task.month + 1) + "/" + task.year;
         checkBox.setChecked(task.complete);
         dateText.setText(date);
 
