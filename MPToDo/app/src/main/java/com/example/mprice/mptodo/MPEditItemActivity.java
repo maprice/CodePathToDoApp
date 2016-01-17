@@ -1,9 +1,7 @@
 package com.example.mprice.mptodo;
 
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
@@ -23,14 +21,23 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
+/**
+ * Created by mprice on 1/16/16.
+ */
 public class MPEditItemActivity extends AppCompatActivity {
 
-    @Bind(R.id.spinnerCategory) Spinner spinnerCategory;
-    @Bind(R.id.spinnerPriority) Spinner spinnerPriority;
-    @Bind(R.id.editTextName) EditText editTextName;
-    @Bind(R.id.checkBox) CheckBox checkBox;
-    @Bind(R.id.datePicker) DatePicker datePicker;
-    @Bind(R.id.view_edit_item) LinearLayout layout;
+    @Bind(R.id.spinnerCategory)
+    Spinner mSpinnerCategory;
+    @Bind(R.id.spinnerPriority)
+    Spinner mSpinnerPriority;
+    @Bind(R.id.editTextName)
+    EditText mEditTextName;
+    @Bind(R.id.checkBox)
+    CheckBox mCheckBox;
+    @Bind(R.id.datePicker)
+    DatePicker mDatePicker;
+    @Bind(R.id.view_edit_item)
+    LinearLayout mBackgroundLayout;
 
     private MPTask mTask;
 
@@ -40,92 +47,68 @@ public class MPEditItemActivity extends AppCompatActivity {
         setContentView(R.layout.activity_mpedit_item);
         ButterKnife.bind(this);
 
-
+        // Priority Spinner
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.priority_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerPriority.setAdapter(adapter);
+        mSpinnerPriority.setAdapter(adapter);
 
+        // Category Spinner
         List<MPTaskCategory> devices = SQLite.select().from(MPTaskCategory.class).queryList();
-
         ArrayAdapter<MPTaskCategory> dataAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, devices);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerCategory.setAdapter(dataAdapter);
-
+        mSpinnerCategory.setAdapter(dataAdapter);
 
         long taskId = getIntent().getLongExtra("taskId", 0);
         int colorId = getIntent().getIntExtra("color", 0);
 
-        Resources res = this.getResources();
-        int[] colorArray = res.getIntArray(R.array.androidcolors);
-
-        int color = colorId % colorArray.length;
-
-
-        if (taskId < 0) {
-            editTextName.setText("");
-
-        } else {
+        if (taskId >= 0) {
             mTask = SQLite.select().from(MPTask.class).where(MPTask_Table.id.eq(taskId)).querySingle();
 
-
             if (mTask != null) {
+                mBackgroundLayout.setBackgroundColor(MPUtils.getColorWithRowId(colorId, this));
+                mEditTextName.setText(mTask.name);
+                mEditTextName.setSelection(mEditTextName.getText().length());
+                mCheckBox.setChecked(mTask.complete);
+                mDatePicker.updateDate(mTask.year, mTask.month, mTask.day);
 
-                layout.setBackgroundColor(colorArray[color]);
-
-                editTextName.setText(mTask.name);
+                // Set Category Picker
                 MPTaskCategory category = mTask.categoryForeignKeyContainer.load();
-
                 for (int i = 0; i < devices.size(); i++) {
                     if (devices.get(i).title.equals(category.title)) {
-                        spinnerCategory.setSelection(i);
+                        mSpinnerCategory.setSelection(i);
                     }
                 }
-
-                checkBox.setChecked(mTask.complete);
-
-                datePicker.updateDate(mTask.year, mTask.month, mTask.day);
             }
         }
-
-        editTextName.setSelection(editTextName.getText().length());
-
     }
-
 
     @Override
     public void onResume() {
         super.onResume();  // Always call the superclass method first
-        if (editTextName.getText().toString().isEmpty()) {
-
-
-            editTextName.requestFocus();
+        if (mEditTextName.getText().toString().isEmpty()) {
+            mEditTextName.requestFocus();
             getWindow().setSoftInputMode(
                     WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         }
     }
 
-
-    public void onSaveClick(View v){
+    public void onSaveClick(View v) {
         if (mTask == null) {
             mTask = new MPTask();
         }
 
-        mTask.name = editTextName.getText().toString();
-        mTask.priority = spinnerPriority.getSelectedItemPosition();
-        mTask.complete = checkBox.isChecked();
-        mTask.year = datePicker.getYear();
-        mTask.month = datePicker.getMonth();
-        mTask.day = datePicker.getDayOfMonth();
+        // Update Task
+        mTask.name = mEditTextName.getText().toString();
+        mTask.priority = mSpinnerPriority.getSelectedItemPosition();
+        mTask.complete = mCheckBox.isChecked();
+        mTask.year = mDatePicker.getYear();
+        mTask.month = mDatePicker.getMonth();
+        mTask.day = mDatePicker.getDayOfMonth();
 
-        MPTaskCategory category = (MPTaskCategory) spinnerCategory.getSelectedItem();
-        Log.e("Tag", category.title);
+        MPTaskCategory category = (MPTaskCategory) mSpinnerCategory.getSelectedItem();
         mTask.addToCategory(category);
         mTask.save();
-        finish(); // closes the activity
-
-
+        finish();
     }
-
-
 }

@@ -14,57 +14,33 @@ import android.widget.ExpandableListView;
 
 import com.example.mprice.mptodo.models.MPTask;
 
+/**
+ * Created by mprice on 1/16/16.
+ */
 public class MPMainActivity extends AppCompatActivity implements DialogInterface.OnDismissListener {
 
-@Override
-public void onDismiss(final DialogInterface dialog) {
-        //Fragment dialog had been dismissed
+    private MPTaskListAdapter mTaskListAdapter;
+    private ExpandableListView mExpandableListView;
 
-
-    mTaskListAdapter.notifyDataSetChanged();
-        }
-
-
-
-
-
-    MPTaskListAdapter mTaskListAdapter;
-
-    ExpandableListView lvItems;
-    int REQUEST_CODE = 20;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mpmain);
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
 
-        lvItems = (ExpandableListView)findViewById(R.id.lvItems);
-        registerForContextMenu(lvItems);
+        mExpandableListView = (ExpandableListView)findViewById(R.id.lvItems);
+        registerForContextMenu(mExpandableListView);
 
         mTaskListAdapter = new MPTaskListAdapter(this);
-        // itemsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, items);
-        lvItems.setAdapter(mTaskListAdapter);
+        mExpandableListView.setAdapter(mTaskListAdapter);
 
         setupListViewListener();
-
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 Intent i = new Intent(MPMainActivity.this, MPEditItemActivity.class);
-                // put "extras" into the bundle for access in the second activity
-
-
-                i.putExtra("text", "sdf");
-                i.putExtra("position", "asd");
-                // brings up the second activity
-
-                startActivityForResult(i, REQUEST_CODE);
-
-
+                startActivity(i);
             }
         });
     }
@@ -81,60 +57,53 @@ public void onDismiss(final DialogInterface dialog) {
     public boolean onContextItemSelected(MenuItem item) {
         ExpandableListView.ExpandableListContextMenuInfo info =
                 (ExpandableListView.ExpandableListContextMenuInfo) item.getMenuInfo();
-        int groupPos = 0, childPos = 0;
-
-            groupPos = ExpandableListView.getPackedPositionGroup(info.packedPosition);
-            childPos = ExpandableListView.getPackedPositionChild(info.packedPosition);
+        int groupPos = ExpandableListView.getPackedPositionGroup(info.packedPosition);
+        int childPos = ExpandableListView.getPackedPositionChild(info.packedPosition);
 
         if (childPos >= 0) {
             mTaskListAdapter.removeTask(groupPos,childPos);
-
         } else {
-            mTaskListAdapter.removeGroup(groupPos);
-                }
+            mTaskListAdapter.removeCategory(groupPos);
+        }
 
         mTaskListAdapter.notifyDataSetChanged();
         return true;
     }
 
     private void setupListViewListener() {
-        lvItems.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+        mExpandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
 
             @Override
             public boolean onChildClick(ExpandableListView parent, View v,
                                         int groupPosition, int childPosition, long id) {
 
                 Intent i = new Intent(MPMainActivity.this, MPEditItemActivity.class);
-                // put "extras" into the bundle for access in the second activity
 
-                // MPTaskCategory category = mTaskListAdapter.getGroup(groupPosition);
                 MPTask task = mTaskListAdapter.getChild(groupPosition, childPosition);
                 i.putExtra("taskId", task.id);
                 i.putExtra("color", groupPosition);
 
-                // brings up the second activity
-
                 startActivity(i);
-
                 return true;
             }
         });
-
-
     }
 
     @Override
     public void onResume() {
-        super.onResume();  // Always call the superclass method first
+        super.onResume();
         mTaskListAdapter.notifyDataSetChanged();
     }
 
+    @Override
+    public void onDismiss(final DialogInterface dialog) {
+        mTaskListAdapter.notifyDataSetChanged();
+    }
 
     public void onCategoryCreateClicked(View item) {
-            FragmentManager fm = getSupportFragmentManager();
-            MPAddCategoryDialog editNameDialog = MPAddCategoryDialog.newInstance();
-
-            editNameDialog.show(fm, "fragment_edit_name");
+        FragmentManager fm = getSupportFragmentManager();
+        MPAddCategoryDialog editNameDialog = MPAddCategoryDialog.newInstance();
+        editNameDialog.show(fm, "fragment_edit_name");
     }
 }
 

@@ -3,7 +3,6 @@ package com.example.mprice.mptodo;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Typeface;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,21 +24,14 @@ import java.util.List;
  */
 public class MPTaskListAdapter extends BaseExpandableListAdapter {
 
-
     private FlowQueryList<MPTaskCategory> mFlowQueryList;
-
-    private final Context context;
-
-
+    private final Context mContext;
 
     public MPTaskListAdapter(Context context) {
-        this.context = context;
-
+        this.mContext = context;
 
         mFlowQueryList = new FlowQueryList<>(MPTaskCategory.class, MPTaskCategory_Table.title.like("%"));
         mFlowQueryList.enableSelfRefreshes(context);
-        // mFlowQueryList.enableSelfRefreshes(context);
-        // mFlowQueryList = new FlowQueryList<>(MPTask.class, MPTask_Table.name.like("%"));
     }
 
 
@@ -50,7 +42,6 @@ public class MPTaskListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        Log.e("tag", "CHild count = " + mFlowQueryList.get(groupPosition).getTasks().size());
         return mFlowQueryList.get(groupPosition).getTasks().size();
     }
 
@@ -83,32 +74,25 @@ public class MPTaskListAdapter extends BaseExpandableListAdapter {
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
         String headerTitle = getGroup(groupPosition).title;
         if (convertView == null) {
-            LayoutInflater infalInflater = (LayoutInflater) context
+            LayoutInflater inflater = (LayoutInflater) mContext
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = infalInflater.inflate(R.layout.task_list_group, null);
+            convertView = inflater.inflate(R.layout.task_list_group, null);
         }
 
-
-        convertView.setBackgroundColor(getColor(groupPosition));
-        TextView lblListHeader = (TextView) convertView
-                .findViewById(R.id.lblListHeader);
+        // Set Title text
+        convertView.setBackgroundColor(MPUtils.getColorWithRowId(groupPosition, mContext));
+        TextView lblListHeader = (TextView) convertView.findViewById(R.id.lblListHeader);
         lblListHeader.setTypeface(null, Typeface.ITALIC);
         lblListHeader.setText(headerTitle);
 
-        TextView progress = (TextView) convertView
-                .findViewById(R.id.text_view_progress);
+        // Set Progress text
+        TextView progress = (TextView) convertView.findViewById(R.id.text_view_progress);
         progress.setTypeface(null, Typeface.NORMAL);
-
-
         MPTaskCategory category = getGroup(groupPosition);
-
-
-        List<MPTask> sadfasd = SQLite.select()
+        List<MPTask> completedTasks = SQLite.select()
                 .from(MPTask.class)
                 .where(MPTask_Table.categoryForeignKeyContainer_id.eq(category.id)).and(MPTask_Table.complete.is(true)).queryList();
-
-
-        String progressText = sadfasd.size() + "/" + getChildrenCount(groupPosition);
+        String progressText = completedTasks.size() + "/" + getChildrenCount(groupPosition);
         progress.setText(progressText);
 
 
@@ -117,39 +101,28 @@ public class MPTaskListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-
         View rowView;
         if (convertView == null) {
-            LayoutInflater inflater = (LayoutInflater) context
+            LayoutInflater inflater = (LayoutInflater) mContext
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             rowView = inflater.inflate(R.layout.task_list_item, parent, false);
         } else {
             rowView = convertView;
         }
 
-        TextView textView1 = (TextView) rowView.findViewById(R.id.firstLine);
-
-        TextView textView2 = (TextView) rowView.findViewById(R.id.secondLine);
-        TextView dateText = (TextView) rowView.findViewById(R.id.dateText);
-
-        CheckBox checkBox = (CheckBox) rowView.findViewById(R.id.checkBoxItem);
+        TextView itemTitle = (TextView) rowView.findViewById(R.id.task_item_title);
+        TextView itemPriority = (TextView) rowView.findViewById(R.id.task_item_priority);
+        TextView itemDate = (TextView) rowView.findViewById(R.id.task_item_date);
+        CheckBox checkBox = (CheckBox) rowView.findViewById(R.id.task_item_checkbox);
 
         MPTask task  = getChild(groupPosition, childPosition);
-
         String date = task.day + "/" + (task.month + 1) + "/" + task.year;
+
+        itemDate.setText(date);
         checkBox.setChecked(task.complete);
-        dateText.setText(date);
-
-        textView1.setText(task.name);
-
-        Resources res = context.getResources();
-        String[] colorArray = res.getStringArray(R.array.priority_array);
-        textView2.setText(colorArray[task.priority]);
-
-        int[] priorityColors = res.getIntArray(R.array.priorityColors);
-        textView2.setTextColor(priorityColors[task.priority]);
-
-
+        itemTitle.setText(task.name);
+        itemPriority.setText(MPUtils.getPriorityString(task.priority, mContext));
+        itemPriority.setTextColor(MPUtils.getColorWithPriority(task.priority, mContext));
 
         return rowView;
     }
@@ -160,7 +133,7 @@ public class MPTaskListAdapter extends BaseExpandableListAdapter {
     }
 
     private int getColor(int position) {
-        Resources res = context.getResources();
+        Resources res = mContext.getResources();
         int[] colorArray = res.getIntArray(R.array.androidcolors);
 
         int color = position % colorArray.length;
@@ -175,9 +148,8 @@ public class MPTaskListAdapter extends BaseExpandableListAdapter {
 
     }
 
-    public void removeGroup(int groupPos) {
+    public void removeCategory(int groupPos) {
         mFlowQueryList.remove(groupPos);
-        mFlowQueryList.get(groupPos).update();
         mFlowQueryList.refresh();
     }
 
@@ -185,7 +157,5 @@ public class MPTaskListAdapter extends BaseExpandableListAdapter {
         mFlowQueryList.get(groupPos).getTasks().get(childPosition).delete();
         mFlowQueryList.get(groupPos).update();
         mFlowQueryList.refresh();
-
     }
-
 }

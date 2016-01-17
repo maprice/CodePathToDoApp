@@ -24,9 +24,12 @@ import butterknife.ButterKnife;
  */
 public class MPAddCategoryDialog extends DialogFragment implements View.OnClickListener {
 
-    @Bind(R.id.button_dialog_add) Button mButtonOK;
-    @Bind(R.id.button_dialog_cancel) Button mButtonCancel;
-    @Bind(R.id.edit_text_name) EditText mEditTextName;
+    @Bind(R.id.button_dialog_add)
+    Button mButtonOK;
+    @Bind(R.id.button_dialog_cancel)
+    Button mButtonCancel;
+    @Bind(R.id.edit_text_name)
+    EditText mEditTextName;
 
     public MPAddCategoryDialog() {
         // Empty constructor is required for DialogFragment

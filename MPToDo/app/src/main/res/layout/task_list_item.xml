@@ -8,7 +8,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text=""
-        android:id="@+id/checkBoxItem"
+        android:id="@+id/task_item_checkbox"
         android:layout_alignParentBottom="true"
         android:layout_alignParentTop="true"
         android:layout_marginRight="6dip"
@@ -17,26 +17,26 @@
         android:focusable="false"/>
 
     <TextView
-        android:id="@+id/secondLine"
+        android:id="@+id/task_item_priority"
         android:layout_width="fill_parent"
         android:layout_height="26dip"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_toRightOf="@id/checkBoxItem"
+        android:layout_toRightOf="@id/task_item_checkbox"
         android:ellipsize="marquee"
         android:singleLine="true"
         android:text="Description"
         android:textSize="12sp" />
 
     <TextView
-        android:id="@+id/firstLine"
+        android:id="@+id/task_item_title"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@id/secondLine"
+        android:layout_above="@id/task_item_priority"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:layout_alignWithParentIfMissing="true"
-        android:layout_toRightOf="@id/checkBoxItem"
+        android:layout_toRightOf="@id/task_item_checkbox"
         android:gravity="center_vertical"
         android:text="Example application"
         android:textSize="16sp" />
@@ -45,10 +45,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="04/12/2016"
-        android:id="@+id/dateText"
+        android:id="@+id/task_item_date"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
-
-
 </RelativeLayout>
