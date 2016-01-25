@@ -6,6 +6,7 @@ package com.example.mprice.mptodo;
 
 import android.app.Application;
 
+import com.example.mprice.mptodo.model.MPTaskDatabase;
 import com.raizlabs.android.dbflow.config.FlowManager;
 
 public class MPApplication extends Application {
