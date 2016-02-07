@@ -1,4 +1,6 @@
-# CodePath ToDo App Submission
+# ![Alt text](/images/minimalist_logo.png "Its like a list, only minimal")
+Minimalist is a simple task list application.  It lets users create tasks, categories and track their progress.
+
 ## Features
 - SQLite Storage model with [DBFlow](https://github.com/Raizlabs/DBFlow)
 - Field and method binding with [ButterKnife](http://jakewharton.github.io/butterknife/)
